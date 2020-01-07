@@ -12,6 +12,7 @@
           <!-- 我是样例菜单 -->
           <el-menu default-active="1-4-1"
                    class="el-menu-vertical-demo"
+                   router
                    @open="handleOpen"
                    :collapse="isCollapse">
             <el-submenu index="1">
@@ -21,7 +22,7 @@
               </template>
               <el-menu-item-group>
                 <span slot="title">分组一</span>
-                <el-menu-item index="1-1">选项1</el-menu-item>
+                <el-menu-item index="/mineInfo">选项1</el-menu-item>
                 <el-menu-item index="1-2">选项2</el-menu-item>
               </el-menu-item-group>
               <el-menu-item-group title="分组2">
@@ -60,13 +61,14 @@
           <el-menu default-active="1"
                    class="el-menu-demo tab-page"
                    mode="horizontal"
+                   router
                    @select="handleSelect"
                    active-text-color="#409EFF">
             <el-menu-item index="1">处理中心</el-menu-item>
             <el-submenu index="2">
-              <template slot="title">我的工作台</template>
-              <el-menu-item index="2-1">选项1</el-menu-item>
-              <el-menu-item index="2-2">选项2</el-menu-item>
+              <template slot="title">个人中心</template>
+              <el-menu-item index="/mineInfo">我的信息</el-menu-item>
+              <el-menu-item index="2-2">修改密码</el-menu-item>
               <el-menu-item index="2-3">选项3</el-menu-item>
               <el-submenu index="2-4">
                 <template slot="title">选项4</template>
@@ -116,7 +118,9 @@
     data() {
       return {
         username: '',
-        isCollapse: false
+        isCollapse: false,
+        show:false,
+        activeIndex: '1',
       }
     },
     methods: {
