@@ -1,20 +1,75 @@
 <template>
-  <div id="app">
-    <el-calendar v-model="value">
-    </el-calendar>
-  </div>
+<el-upload
+        class="avatar-uploader"
+        action="/api/intern/auth/saveImage"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+        :headers="headers"
+        :before-upload="beforeAvatarUpload">
+  <img v-if="!imageUrl" :src="require('E:/images/'+item+'.jpg')" class="avatar">
+  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+</el-upload>
 </template>
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>
 
 <script>
+  import {getToken} from "../../utils/auth";
+
   export default {
     data() {
       return {
-        value: new Date()
+        imageUrl: '',
+        item:'1578650870581',
+        test:'',
+        headers:{
+          Authorization: getToken()
+        }
+      };
+    },
+    created(){
+    this.initData();
+    },
+    methods: {
+      initData(){
+        this.test=this.$store.getters.avatar
+        console.log(this.test+"[[][][][")
+      },
+      handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return   isLt2M;
       }
     }
   }
 </script>
-
-<style>
-
-</style>

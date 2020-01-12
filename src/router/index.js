@@ -7,6 +7,7 @@ Router.prototype.push = function push(location) {
 }
 import Index from '@/components/index/index'
 import MineInfo from "@/components/mine/mineInfo";
+import UserManagement from "@/views/admin/components/userManagement"
 import {getToken,removeToken} from "@/utils/auth";
 Vue.use(Router)
 
@@ -41,6 +42,17 @@ let router =  new Router({
         path: '/mineInfo',
         component: MineInfo,
         name: '我的信息',
+        hidden: true
+      },]
+    },
+    {
+      path:'/home',
+      name: '用户管理',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/userManagement',
+        component: UserManagement,
+        name: '用户管理',
         hidden: true
       },]
     },

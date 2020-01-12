@@ -29,7 +29,7 @@ const mutations = {
   },
   SET_EMAIL: (state, email) => {
     state.email = email
-  }
+  },
 }
 
 const actions = {
@@ -52,10 +52,12 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
+
       getInfo(state.token).then(response => {
 
-        const { model } = response
+        let model  = response.data.userInfos
 
+        debugger
         if (!model) {
           reject('Verification failed, please Login again.')
         }
