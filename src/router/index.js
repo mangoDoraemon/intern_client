@@ -8,6 +8,8 @@ Router.prototype.push = function push(location) {
 import Index from '@/components/index/index'
 import MineInfo from "@/components/mine/mineInfo";
 import UserManagement from "@/views/admin/components/userManagement"
+import ModifyPassword from "@/components/mine/modifyPassword"
+import MessageInfo from "@/components/mine/messageInfo"
 import {getToken,removeToken} from "@/utils/auth";
 Vue.use(Router)
 
@@ -43,7 +45,14 @@ let router =  new Router({
         component: MineInfo,
         name: '我的信息',
         hidden: true
-      },]
+      },
+        {
+          path: '/modifyPassword',
+          component: ModifyPassword,
+          name: '修改密码',
+          hidden: true
+        }
+      ]
     },
     {
       path:'/home',
@@ -56,7 +65,17 @@ let router =  new Router({
         hidden: true
       },]
     },
-
+    {
+      path:'/home',
+      name: '公告信息',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/messageInfo',
+        component: MessageInfo,
+        name: '公告信息',
+        hidden: true
+      },]
+    },
   ],
 })
 

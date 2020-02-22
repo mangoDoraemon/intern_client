@@ -1,4 +1,5 @@
 <template>
+  <el-col :span="16" :offset="3">
   <el-table
           :data="tableData"
           border
@@ -44,6 +45,8 @@
       </template>
     </el-table-column>
   </el-table>
+  </el-col>
+
 </template>
 
 <script>

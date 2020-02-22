@@ -14,6 +14,8 @@
                 <el-input type="password" v-model="account.password" auto-complete="off" placeholder="密码"></el-input>
             </el-form-item>
 
+
+
             <el-checkbox class="login_remember" v-model="checked" checked style="float: left">记住密码</el-checkbox>
 
             <el-form-item style="width: 100%">
@@ -44,6 +46,42 @@
                     <el-row>
                         <el-col >
                             <el-form-item label="密码：" prop="empPwd">
+                                <el-input  placeholder="请输入密码" v-model="empRegisteredForm.empPwd"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                            <el-col>
+                                <el-form-item label="注册类型：" prop="radio">
+                                <el-radio-group v-model="radio">
+                                    <el-radio :label="3">学生</el-radio>
+                                    <el-radio :label="6">老师</el-radio>
+                                    <el-radio :label="9">企业</el-radio>
+                                </el-radio-group>
+                                </el-form-item>
+                            </el-col>
+
+                    </el-row>
+
+                    <el-row v-if="radio === 3">
+                        <el-col >
+                            <el-form-item label="学号：" prop="empPwd">
+                                <el-input  placeholder="请输入密码" v-model="empRegisteredForm.empPwd"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row v-if="radio === 6">
+                        <el-col >
+                            <el-form-item label="工号：" prop="empPwd">
+                                <el-input  placeholder="请输入密码" v-model="empRegisteredForm.empPwd"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row v-if="radio === 9">
+                        <el-col >
+                            <el-form-item label="企业信用号" prop="empPwd">
                                 <el-input  placeholder="请输入密码" v-model="empRegisteredForm.empPwd"></el-input>
                             </el-form-item>
                         </el-col>
@@ -84,6 +122,8 @@
                 }
             };
             return {
+                radio:'',
+
                 checkCode:'',
                 dialogVisible: false,
                 logining: false,

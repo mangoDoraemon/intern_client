@@ -15,10 +15,15 @@
                    router
                    @open="handleOpen"
                    :collapse="isCollapse">
+
+            <el-menu-item index="3">
+              <i class="el-icon-document"></i>
+              <span slot="title">首页</span>
+            </el-menu-item>
             <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-location"></i>
-                <span slot="title">导航一</span>
+                <span slot="title">常规菜单</span>
               </template>
               <el-menu-item-group>
                 <span slot="title">分组一</span>
@@ -37,11 +42,7 @@
               <i class="el-icon-menu"></i>
               <span slot="title">用户管理</span>
             </el-menu-item>
-            <el-menu-item index="3"
-                          disabled>
-              <i class="el-icon-document"></i>
-              <span slot="title">导航三</span>
-            </el-menu-item>
+
             <el-menu-item index="4">
               <i class="el-icon-setting"></i>
               <span slot="title">导航四</span>
@@ -68,7 +69,7 @@
             <el-submenu index="2">
               <template slot="title">个人中心</template>
               <el-menu-item index="/mineInfo">我的信息</el-menu-item>
-              <el-menu-item index="2-2">修改密码</el-menu-item>
+              <el-menu-item index="/modifyPassword">修改密码</el-menu-item>
               <el-menu-item index="2-3">选项3</el-menu-item>
               <el-submenu index="2-4">
                 <template slot="title">选项4</template>
@@ -77,8 +78,7 @@
                 <el-menu-item index="2-4-3">选项3</el-menu-item>
               </el-submenu>
             </el-submenu>
-            <el-menu-item index="3"
-                          disabled>消息中心</el-menu-item>
+            <el-menu-item index="3">公告信息</el-menu-item>
             <el-menu-item index="4">
               <a href="#">订单管理</a>
             </el-menu-item>
@@ -87,10 +87,7 @@
           <div class="app-header-userinfo">
             <el-dropdown trigger="hover"
                          :hide-on-click="false">
-              <span class="el-dropdown-link">
-                {{ username }}
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
+              <div class="block"><el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar></div>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>我的消息</el-dropdown-item>
                 <el-dropdown-item>设置</el-dropdown-item>
