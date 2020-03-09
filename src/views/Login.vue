@@ -53,7 +53,7 @@
                     <el-row>
                             <el-col>
                                 <el-form-item label="注册类型：" prop="radio">
-                                <el-radio-group v-model="radio">
+                                <el-radio-group v-model="radio" @change="changeType">
                                     <el-radio :label="3">学生</el-radio>
                                     <el-radio :label="6">老师</el-radio>
                                     <el-radio :label="9">企业</el-radio>
@@ -66,7 +66,7 @@
                     <el-row v-if="radio === 3">
                         <el-col >
                             <el-form-item label="学号：" prop="empPwd">
-                                <el-input  placeholder="请输入密码" v-model="empRegisteredForm.empPwd"></el-input>
+                                <el-input  placeholder="请输您的学号" v-model="empRegisteredForm.studentNumber"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -74,7 +74,7 @@
                     <el-row v-if="radio === 6">
                         <el-col >
                             <el-form-item label="工号：" prop="empPwd">
-                                <el-input  placeholder="请输入密码" v-model="empRegisteredForm.empPwd"></el-input>
+                                <el-input  placeholder="请输入您的工号" v-model="empRegisteredForm.teacherNumber"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -82,7 +82,7 @@
                     <el-row v-if="radio === 9">
                         <el-col >
                             <el-form-item label="企业信用号" prop="empPwd">
-                                <el-input  placeholder="请输入密码" v-model="empRegisteredForm.empPwd"></el-input>
+                                <el-input  placeholder="请输入您的企业信用号" v-model="empRegisteredForm.companyNumber"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -131,6 +131,9 @@
                 empRegisteredForm: {
                     empAccount:'',
                     empPwd:'',
+                    teacherNumber:'',
+                    studentNumber:'',
+                    companyNumber:'',
                 },
                 account: {
                     username: '',
@@ -181,29 +184,52 @@
                         var registeredParams = {
                             socialId: this.empRegisteredForm.empAccount,
                             password: this.empRegisteredForm.empPwd,
+                            registerType:this.radio,
+                            studentNumber: this.empRegisteredForm.studentNumber,
+                            teacherNumber: this.empRegisteredForm.teacherNumber,
+                            companyNumber: this.empRegisteredForm.companyNumber,
                         };
                         //调用函数  传递参数 获取结果
                         createUser(registeredParams).then(data => {
+                            debugger
                             this.logining = false;
-                            if (data.code == '200') {
+                            this.dialogVisible=false;
+                            if (data.data.code == '200') {
                                 //注册成功
                                 this.$message({
-                                    message: data.msg,
-                                    type: data.level
+                                    message: data.data.msg,
+                                    type: data.data.level
                                 });
                                 this.dialogVisible= false;
-                            } else {
+                            } else if(data.data.code ==='3333') {
                                 this.$message({
-                                    message: data.msg,
-                                    type: data.level
+                                    message: data.data.msg,
+                                    type: data.data.level
+                                });
+                            }else if(data.data.code==='4444'){
+                                this.$message({
+                                    message: data.data.msg,
+                                    type: data.data.level
+                                });
+                            }else if(data.data.code==='00001'){
+                                this.$message({
+                                    message: data.data.msg,
+                                    type: data.data.level
                                 });
                             }
                         })
                     } else {
-                        console.log('error submit');
+                        this.$message({
+                            message: "注册失败",
+                            type: "error"
+                        });
                         return false;
                     }
                 });
+            },
+
+            changeType(val){
+             console.log(val)
             },
             // 注册按钮点击事件
             registered(){
@@ -256,14 +282,21 @@
                         var userInfo = {socialId: this.account.username, password: this.account.password};
 
                         this.$store.dispatch('user/login',userInfo).then(res=>{
-                            console.log(res)
+
                             if(res.data.code=='200'){
-
+                                this.$message({
+                                    message: "登陆成功",
+                                    type: "success"
+                                });
                                 this.$router.push({path: '/index'});
-                                this.$store.dispatch('user/getInfo').then(data=>{
-                                    console.log(data)
-                                })
+                                this.$store.dispatch('user/getInfo');
 
+                            }else if(res.data.code=='9999'){
+                                this.$message({
+                                    message: "用户名或密码错误",
+                                    type: "error"
+                                });
+                                this.$router.push('/login');
                             }
                         })
                         //调用函数  传递参数 获取结果

@@ -1,6 +1,7 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+import {redisData} from "../../api/common";
 
 const state = {
   token: getToken(),
@@ -8,7 +9,14 @@ const state = {
   avatar: '',
   email: '',
   introduction: '',
-  roles: []
+  roles: [],
+  socialId:'',
+  roleId:0,
+  id:'',
+  roleName:'',
+  redis: [],
+  teacherNumber:'',
+  companyNumber:''
 }
 
 const mutations = {
@@ -30,6 +38,29 @@ const mutations = {
   SET_EMAIL: (state, email) => {
     state.email = email
   },
+  SET_SOCIAL_ID: (state, socialId) => {
+    state.socialId = socialId
+  },
+  SET_ROLE_ID:(state,roleId) =>{
+    state.roleId=roleId
+  },
+  SET_ID:(state,id)=>{
+    state.id=id
+  },
+  SET_ROLE_NAME:(state,roleName)=>{
+    state.roleName=roleName
+  },
+  SET_TEACHER_NUMBER:(state,teacherNumber)=>{
+    state.teacherNumber=teacherNumber
+  },
+  SET_COMPANY_NUMBER:(state,companyNumber)=>{
+    state.companyNumber=companyNumber
+  },
+  $_setRedis: (state, data) => {
+    const {key, value} = data;
+    state.redis[key] = value
+  },
+
 }
 
 const actions = {
@@ -52,19 +83,14 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-
       getInfo(state.token).then(response => {
-
         let model  = response.data.userInfos
-
-        debugger
         if (!model) {
           reject('Verification failed, please Login again.')
         }
-
-        const { roles, name, avatar, introduction, email } = model
-
+        const { roles, name, avatar, introduction, email,socialId,roleId,id,roleName,teacherNumber,companyNumber } = model
         // roles must be a non-empty array
+        debugger
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
@@ -74,6 +100,12 @@ const actions = {
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
         commit('SET_EMAIL', email)
+        commit('SET_SOCIAL_ID', socialId)
+        commit('SET_ROLE_ID', roleId)
+        commit('SET_ID', id)
+        commit('SET_ROLE_NAME',roleName)
+        commit('SET_TEACHER_NUMBER',teacherNumber)
+        commit('SET_COMPANY_NUMBER',companyNumber)
         resolve(model)
 
       }).catch(error => {
@@ -104,6 +136,19 @@ const actions = {
       commit('SET_ROLES', [])
       removeToken()
       resolve()
+    })
+  },
+
+  fetchRedis(key) {
+    return new Promise((resolve, reject) => {
+        redisData(key).then(response => {
+          debugger
+          const {data} = response;
+          resolve(data)
+        }).catch(error => {
+          reject(error)
+        })
+
     })
   },
 

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import  router from "vue-router";
 
 // create an axios instance
 const service = axios.create({
@@ -25,5 +26,19 @@ service.interceptors.request.use(
 )
 
 
+// response interceptor
+service.interceptors.response.use(
+    /**
+     * If you want to get information such as headers or status
+     * Please return  response => response
+     */
+    response => response,
+    error => {
+        if (error.response && error.response.status === 404) {
+            router.push('/')
+        }
+        return Promise.reject(error.response)
+    }
+)
 
 export default service

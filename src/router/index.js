@@ -9,7 +9,10 @@ import Index from '@/components/index/index'
 import MineInfo from "@/components/mine/mineInfo";
 import UserManagement from "@/views/admin/components/userManagement"
 import ModifyPassword from "@/components/mine/modifyPassword"
-import MessageInfo from "@/components/mine/messageInfo"
+//import MessageInfo from "@/components/mine/messageInfo"
+import Notice from "@/components/notice/notice"
+import StudentInfo from "@/components/student/studentInfo"
+import ShowNoticeInfo from "@/components/notice/showNoticeInfo"
 import {getToken,removeToken} from "@/utils/auth";
 Vue.use(Router)
 
@@ -70,9 +73,32 @@ let router =  new Router({
       name: '公告信息',
       component: () => import('@/views/home'),
       children: [{
-        path: '/messageInfo',
-        component: MessageInfo,
+        path: '/showNoticeInfo',
+        component: ShowNoticeInfo,
         name: '公告信息',
+        hidden: true
+      },]
+    },
+
+    {
+      path:'/home',
+      name: '公告管理',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/notice',
+        component: Notice,
+        name: '公告管理',
+        hidden: true
+      },]
+    },
+    {
+      path:'/home',
+      name: '学生管理',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/studentInfo',
+        component: StudentInfo,
+        name: '学生管理',
         hidden: true
       },]
     },

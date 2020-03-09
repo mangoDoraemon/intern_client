@@ -9,35 +9,35 @@
     </div>
 
   <div class="fromClass">
-  <el-form ref="form" :model="mineForm" label-width="100px">
+  <el-form ref="updateInfoForm" :model="mineForm" label-width="100px" :rules="rules">
   <el-col  >
   <el-form-item label="账户ID" >
-    <el-input v-model="mineForm.name"></el-input>
+    <el-input v-model="mineForm.socialId" :disabled="true"></el-input>
   </el-form-item>
   </el-col>
   <el-col >
-  <el-form-item label="姓名">
-    <el-input v-model="mineForm.name"></el-input>
+  <el-form-item label="账户名称" prop="name">
+    <el-input v-model="mineForm.name" ></el-input>
   </el-form-item>
   </el-col>
   <el-col >
-  <el-form-item label="权限">
-    <el-input v-model="mineForm.name"></el-input>
+  <el-form-item label="权限" >
+    <el-input v-model="mineForm.roleIdName" :disabled="true"></el-input>
   </el-form-item>
   </el-col>
   <el-col >
-  <el-form-item label="邮箱地址">
-    <el-input v-model="mineForm.name"></el-input>
+  <el-form-item label="邮箱地址" prop="email">
+    <el-input v-model="mineForm.email"></el-input>
   </el-form-item>
   </el-col>
   <el-col >
-  <el-form-item label="个人介绍">
-    <el-input type="textarea" v-model="mineForm.name"></el-input>
+  <el-form-item label="个人介绍" prop="introduction">
+    <el-input type="textarea" v-model="mineForm.introduction"></el-input>
   </el-form-item>
   </el-col>
   <el-col >
   <el-form-item>
-    <el-button type="primary" @click="onSubmit">保存</el-button>
+    <el-button type="primary" @click="onSubmit('updateInfoForm')">保存</el-button>
     <el-button>取消</el-button>
   </el-form-item>
   </el-col>
@@ -55,8 +55,7 @@
               :on-success="handleAvatarSuccess"
               :headers="headers"
               :before-upload="beforeAvatarUpload">
-        <img v-if="!imageUrl" :src="require('E:/images/'+item+'.jpg')" class="avatar">
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        <img :src="require('E:/images/'+item+'.jpg')" class="avatar">
       </el-upload>
         <span style="">点击修改头像</span>
       </div>
@@ -66,18 +65,49 @@
 </template>
 <script>
   import {getToken} from "../../utils/auth";
+  import {getInfo,updateMineInfo} from '@/api/user';
   export default {
+    inject:['reload'],
     data() {
+
+      var validateEmail = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请正确填写邮箱'));
+        } else {
+          if (value !== '') {
+            var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            if(!reg.test(value)){
+              callback(new Error('请输入有效的邮箱'));
+            }
+          }
+          callback();
+        }
+      };
       return {
           mineForm:{
             name:'',
-            test:''
+            email:'',
+            introduction:'',
+            rolId:0,
+            socialId:'',
+            id:''
           },
         imageUrl: '',
-        item:'1578650870581',
+        item:'1578636594070',
         test:'',
         headers:{
           Authorization: getToken()
+        },
+        userInfos:{
+
+        },
+        rules:{
+            email:[
+              {required:true, validator:validateEmail, trigger: 'blur'}
+            ],
+          introduction:[
+            {required:true,message:'请填写个人说明'}
+          ]
         }
       }
     },
@@ -86,16 +116,98 @@
     },
     methods:{
       initData(){
-        console.log("-----------------"+this.$store.getters.name)
-        this.mineForm.name=this.$store.getters.name
-        this.mineForm.test=this.$store.getters.avatar
-        console.log("-----------------"+this.mineForm.test)
-      },
-      onSubmit(){
 
+        this.mineForm.name=this.$store.getters.name
+        this.mineForm.email=this.$store.getters.email
+        this.mineForm.introduction=this.$store.getters.introduction
+        this.mineForm.socialId=this.$store.getters.socialId
+        this.mineForm.roleId=this.$store.getters.roleId
+        this.mineForm.id=this.$store.getters.id
+        let data=this.$store.getters.roleId
+        if(data ==1){
+          this.mineForm.roleIdName='指导教师'
+        }
+        if(data ==1){
+          this.mineForm.roleIdName='学生'
+        }
+        if(data == 2){
+          this.mineForm.roleIdName='管理员'
+        }
+        if(data == 3){
+          this.mineForm.roleIdName='老师'
+        }
+        if(data == 4){
+          this.mineForm.roleIdName='公司'
+        }
+        getInfo(getToken()).then(res => {
+          let model  = res.data.userInfos
+          const { avatar } = model
+          let _that=this
+          _that.item=avatar.substring(10,23)
+        })
+
+
+      },
+
+      onSubmit(formName){
+
+        this.$refs[formName].validate((valid) =>{
+          if(valid){
+            updateMineInfo(this.mineForm).then(res=>{
+              if (res.data.code == '200') {
+                //修改信息成功
+                this.$message({
+                  message: res.data.msg,
+                  type: res.data.level
+                });
+              }else{
+                this.$message({
+                  message: res.data.msg,
+                  type: res.data.level
+                });
+              }
+            })
+          }
+        })
+
+
+        getInfo(getToken()).then(res => {
+          let model  = res.data.userInfos
+          const { name, avatar, introduction, email,socialId,roleId,id } = model
+          let _that=this
+          this.mineForm.name=name
+          this.mineForm.email=email
+          this.mineForm.introduction=introduction
+          this.mineForm.socialId=socialId
+          this.mineForm.roleId=_that.roleId
+          this.mineForm.id=id
+          let data=roleId
+          if(data ==1){
+            this.mineForm.roleIdName='学生'
+          }
+          if(data == 2){
+            this.mineForm.roleIdName='管理员'
+          }
+          if(data == 3){
+            this.mineForm.roleIdName='老师'
+          }
+          if(data == 4){
+            this.mineForm.roleIdName='公司'
+          }
+          _that.item=avatar.substring(10,23)
+        })
       },
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
+        getInfo(getToken()).then(res => {
+          let model  = res.data.userInfos
+          const { avatar } = model
+          let _that=this
+          _that.item=avatar.substring(10,23)
+        })
+
+
+
       },
       beforeAvatarUpload(file) {
 
