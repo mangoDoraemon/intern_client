@@ -13,6 +13,7 @@ import ModifyPassword from "@/components/mine/modifyPassword"
 import Notice from "@/components/notice/notice"
 import StudentInfo from "@/components/student/studentInfo"
 import ShowNoticeInfo from "@/components/notice/showNoticeInfo"
+import TeacherInfo from "@/components/teacher/teacherInfo"
 import {getToken,removeToken} from "@/utils/auth";
 Vue.use(Router)
 
@@ -99,6 +100,17 @@ let router =  new Router({
         path: '/studentInfo',
         component: StudentInfo,
         name: '学生管理',
+        hidden: true
+      },]
+    },
+    {
+      path:'/home',
+      name: '教师管理',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/teacherInfo',
+        component: TeacherInfo,
+        name: '教师管理',
         hidden: true
       },]
     },

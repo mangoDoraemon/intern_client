@@ -1,24 +1,14 @@
 <template>
     <div class="app-container">
         <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-            <el-form-item label="公告标题" prop="noticeTitle">
+            <el-form-item label="公告搜索" prop="noticeTitle">
                 <el-input
-                        v-model="queryParams.noticeTitle"
-                        placeholder="请输入公告标题"
+                        v-model="fuzzy"
+                        placeholder="请输入搜索内容"
                         clearable
                         size="small"
                         @keyup.enter.native="handleQuery"
                 />
-            </el-form-item>
-            <el-form-item label="公告类型" prop="noticeType">
-                <el-select v-model="queryParams.noticeType" placeholder="请选择公告类型" clearable size="small">
-                    <el-option label="请选择字典生成" value="" />
-                </el-select>
-            </el-form-item>
-            <el-form-item label="公告状态" prop="status">
-                <el-select v-model="queryParams.status" placeholder="请选择公告状态" clearable size="small">
-                    <el-option label="请选择字典生成" value="" />
-                </el-select>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -57,12 +47,13 @@
 
         <el-table v-loading="loading" :data="noticeList" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55" align="center" />
-            <el-table-column label="公告ID" align="center" prop="noticeId" />
+
             <el-table-column label="公告标题" align="center" prop="noticeTitle" />
-            <el-table-column label="公告类型" align="center" prop="noticeType" />
+            <el-table-column label="公告类型" align="center" prop="noticeTypeName" />
             <el-table-column label="公告内容" align="center" prop="noticeContent" />
-            <el-table-column label="公告状态" align="center" prop="status" />
-            <el-table-column label="备注" align="center" prop="remark" />
+            <el-table-column label="公告状态" align="center" prop="statusName" />
+            <el-table-column label="发布人" align="center" prop="manageUser" />
+            <el-table-column label="创建时间" align="center" prop="manageTime" />
             <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
                     <el-button
@@ -133,7 +124,7 @@
 </template>
 
 <script>
-    import { listNotice, getNotice, delNotice, addNotice, updateNotice, exportNotice } from "../../api/notice";
+    import { listNotice, getNotice, delNotice, addNotice, updateNotice} from "../../api/notice";
     export default {
         name: "Notice",
         data() {
@@ -141,7 +132,6 @@
             return {
                 //存储html格式数据
                 html:'',
-                fuzzy:'',
                 // 遮罩层
                 loading: true,
                 // 选中数组
@@ -157,7 +147,6 @@
                 currentPage: 1,
                 fuzzy: '',
                 pageSize: 10,
-                total: 0,
                 // 弹出层标题
                 title: "",
                 // 是否显示弹出层
@@ -241,6 +230,9 @@
                 if(this.$store.getters.roleName){
                     this.form.roleName=this.$store.getters.roleName
                 }
+                if(this.$store.getters.name){
+                    this.form.name=this.$store.getters.name
+                }
 
                 listNotice({}).then(response => {
                     this.noticeList = response.data.list;
@@ -250,7 +242,7 @@
             },
             /** 查询通知公告列表 */
             getList() {
-                this.loading = false;
+                this.loading = true;
                 let data = {
                     'fuzzy': this.fuzzy,
                     'page': this.currentPage,
@@ -295,12 +287,11 @@
             },
             /** 搜索按钮操作 */
             handleQuery() {
-                //this.queryParams.pageNum = 1;
                 this.getList();
             },
             /** 重置按钮操作 */
             resetQuery() {
-                this.resetForm("queryForm");
+                this.fuzzy='',
                 this.handleQuery();
             },
             // 多选框选中数据
@@ -320,9 +311,9 @@
             handleUpdate(row) {
                 //this.reset();
                 this.isAdd = false;
-                const noticeId = row.noticeId || this.ids
+                const noticeId = row.id || this.ids
                 getNotice(noticeId).then(response => {
-                    this.form = response.data;
+                    this.form = response.data.noticeInfo;
                     this.open = true;
                     this.title = "修改通知公告";
                 });
@@ -332,8 +323,8 @@
                 this.$refs["form"].validate(valid => {
                     if (valid) {
                     if (this.isAdd) {
+
                         addNotice(this.form).then(response => {
-                            debugger
                             if (response.data.code === '200') {
                                 this.$message({
                                     message: response.data.msg,
@@ -347,8 +338,11 @@
                         });
                         } else {
                         updateNotice(this.form).then(response => {
-                            if (response.code === 200) {
-                                this.msgSuccess("修改成功");
+                            if (response.data.code === '200') {
+                                this.$message({
+                                    message: response.data.msg,
+                                    type: response.data.level
+                                });
                                 this.open = false;
                                 this.getList();
                             } else {

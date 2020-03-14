@@ -1,55 +1,24 @@
 import request from '@/utils/request'
 
-export function login(data) {
+export function listTeacher(query) {
   return request({
-    url: '/auth/login',
-    method: 'post',
-    data
-  })
-}
-
-export function getInfo(token) {
-  return request({
-    url: `/auth/getUserInfo/${token}`,
-    method: 'get',
-  })
-}
-
-export function createUser(data) {
-  return request({
-    url:'/auth/register',
-    method:'post',
-    data
-  })
-}
-
-
-export function getUserList(query) {
-  return request({
-    url: '/auth/user/v1/list',
+    url: '/auth/teacher/fetchTeacherInfoData',
     method: 'get',
     params: query
   })
 }
 
-export function fetchMineInfo(socialId) {
+export function addTeacher(data) {
   return request({
-    url:'/auth/fetchMineInfo/'+socialId,
-    method:'get'
-  })
-}
-
-export function updateMineInfo(data) {
-  return request({
-    url:'/auth/updateMineInfo',
-    method:'put',
+    url:'/auth/teacher/insertTeacherInfo',
+    method:'post',
     data
   })
 }
 
-export function updateModifyPsd(data) {
+export function updateTeacher(data) {
   return request({
-    url:'/auth/modifyPsd',
+    url:'/auth/teacher/editTeacherInfo',
     method:'put',
     data
   })

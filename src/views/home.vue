@@ -3,20 +3,22 @@
     <el-container>
       <el-aside class="app-side app-side-left"
                 :class="isCollapse ? 'app-side-collapsed' : 'app-side-expanded'">
-        <div class="app-side-logo">
-          <img src="@/assets/logo.png"
-               :width="isCollapse ? '60' : '60'"
+        <div v-show="!isCollapse" class="app-side-logo">
+          <img src="@/assets/title-log3.png"
+               :width="isCollapse ? '200' : '200'"
                height="60" />
         </div>
+
         <div>
           <!-- 我是样例菜单 -->
           <el-menu default-active="1-4-1"
                    class="el-menu-vertical-demo"
                    router
                    @open="handleOpen"
+                   @select="handleSelect"
                    :collapse="isCollapse">
 
-            <el-menu-item index="3">
+            <el-menu-item index="/index">
               <i class="el-icon-document"></i>
               <span slot="title">首页</span>
             </el-menu-item>
@@ -43,6 +45,21 @@
               <i class="el-icon-menu"></i>
               <span slot="title">学生管理</span>
             </el-menu-item>
+
+            <el-menu-item index="/teacherInfo">
+              <i class="el-icon-menu"></i>
+              <span slot="title">教师管理</span>
+            </el-menu-item>
+
+            <el-menu-item index="/studentInfo">
+              <i class="el-icon-menu"></i>
+              <span slot="title">企业管理</span>
+            </el-menu-item>
+
+            <el-menu-item index="/notice">
+              <i class="el-icon-menu"></i>
+              <span slot="title">公告管理</span>
+            </el-menu-item>
             <el-menu-item index="/userManagement">
               <i class="el-icon-menu"></i>
               <span slot="title">学生通讯录</span>
@@ -53,10 +70,7 @@
               <span slot="title">老师通讯录</span>
             </el-menu-item>
 
-            <el-menu-item index="/notice">
-              <i class="el-icon-menu"></i>
-              <span slot="title">公告管理</span>
-            </el-menu-item>
+
 
 
 <!--            <el-menu-item index="4">-->
@@ -65,6 +79,7 @@
 <!--            </el-menu-item>-->
           </el-menu>
         </div>
+
       </el-aside>
 
       <el-container>
@@ -82,7 +97,7 @@
                    @select="handleSelect"
                    active-text-color="#409EFF">
             <el-menu-item index="1">处理中心</el-menu-item>
-            <el-submenu index="2">
+            <el-submenu index="个人中心">
               <template slot="title">个人中心</template>
               <el-menu-item index="/mineInfo">我的信息</el-menu-item>
               <el-menu-item index="/modifyPassword">修改密码</el-menu-item>
@@ -103,9 +118,20 @@
               </el-dropdown-menu>
             </el-dropdown>
           </div>
+
+
         </el-header>
 
         <el-main class="app-body">
+            <div style="margin-left: 20px;margin-bottom: 5px;margin-top: 10px">
+              <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item v-for="item in list" :key="item">{{ item }}</el-breadcrumb-item>
+              </el-breadcrumb>
+              <el-divider content-position="left"></el-divider>
+            </div>
+
+
           <template>
           <router-view/>
           </template>
@@ -125,6 +151,7 @@
         isCollapse: false,
         show:false,
         activeIndex: '1',
+        list:[],
       }
     },
     methods: {
@@ -144,10 +171,40 @@
         console.log(key, keyPath);
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
+        this.activeIndex=key;
+        this.list=keyPath
+
       },
       handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+        this.activeIndex=key;
+        for (let i=0;i<keyPath.length;i++){
+          if(keyPath[i]==='/mineInfo'){
+            keyPath[i]='我的信息';
+          }
+          if(keyPath[i]==='/showNoticeInfo'){
+            keyPath[i]='公告信息';
+          }
+          if(keyPath[i]==='/modifyPassword'){
+            keyPath[i]='修改密码';
+          }
+          if(keyPath[i]==='/teacherInfo'){
+            keyPath[i]='教师管理';
+          }
+          if(keyPath[i]==='/studentInfo'){
+            keyPath[i]='学生管理';
+          }
+          if(keyPath[i]==='/notice'){
+            keyPath[i]='公告管理';
+          }
+          if(keyPath[i]==='/index'){
+            keyPath[i]=''
+          }
+
+
+        }
+        this.list=keyPath
+        console.log(key)
+        console.log(keyPath)
       },
     },
 

@@ -30,3 +30,18 @@ export function delNotice(ids) {
         method: 'delete',
     })
 }
+
+export function updateNotice(data) {
+    return request({
+        url:'/auth/notice/editNoticeInfo',
+        method:'put',
+        data
+    })
+}
+
+export function getNotice(id) {
+    return request({
+        url: `/auth/notice/getNoticeInfoById/${id}`,
+        method: 'get',
+    })
+}
