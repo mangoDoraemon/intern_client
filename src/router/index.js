@@ -14,6 +14,13 @@ import Notice from "@/components/notice/notice"
 import StudentInfo from "@/components/student/studentInfo"
 import ShowNoticeInfo from "@/components/notice/showNoticeInfo"
 import TeacherInfo from "@/components/teacher/teacherInfo"
+import AdminUser from "@/components/admin/adminUser"
+import SysDict from "@/components/common/sysDict"
+import CompanyInfo from "@/components/company/companyInfo"
+import AddInternShip from "@/components/internShip/addInternShip"
+import InternShipInfo from "@/components/internShip/internShipInfo"
+import InternshipReport from "@/components/internShip/internshipReport"
+import AddReport from "@/components/internShip/addReport"
 import {getToken,removeToken} from "@/utils/auth";
 Vue.use(Router)
 
@@ -80,7 +87,64 @@ let router =  new Router({
         hidden: true
       },]
     },
+    {
+      path:'/home',
+      name: '实习信息管理',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/internShipInfo',
+        component: InternShipInfo,
+        name: '实习信息管理',
+        hidden: true
+      },]
+    },
 
+
+    {
+      path:'/home',
+      name: '实习信息添加',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/addInternShip',
+        component: AddInternShip,
+        name: '实习信息管理',
+        hidden: true
+      },]
+    },
+
+      {
+          path:'/home',
+          name: '实习报告管理',
+          component: () => import('@/views/home'),
+          children: [{
+              path: '/internshipReport',
+              component: InternshipReport,
+              name: '实习报告管理',
+              hidden: true
+          },]
+      },
+      {
+          path:'/home',
+          name: '实习报告填写',
+          component: () => import('@/views/home'),
+          children: [{
+              path: '/addReport',
+              component: AddReport,
+              name: '实习报告填写',
+              hidden: true
+          },]
+      },
+    {
+      path:'/home',
+      name: '字典管理',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/sysDict',
+        component: SysDict,
+        name: '字典管理',
+        hidden: true
+      },]
+    },
     {
       path:'/home',
       name: '公告管理',
@@ -105,6 +169,17 @@ let router =  new Router({
     },
     {
       path:'/home',
+      name: '用户管理',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/adminUser',
+        component: AdminUser,
+        name: '用户管理',
+        hidden: true
+      },]
+    },
+    {
+      path:'/home',
       name: '教师管理',
       component: () => import('@/views/home'),
       children: [{
@@ -114,6 +189,20 @@ let router =  new Router({
         hidden: true
       },]
     },
+
+    {
+      path:'/home',
+      name: '企业管理',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/companyInfo',
+        component: CompanyInfo,
+        name: '企业管理',
+        hidden: true
+      },]
+    },
+
+
   ],
 })
 

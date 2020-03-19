@@ -12,7 +12,7 @@ const getters = {
   roleName:state =>state.user.roleName,
   teacherNumber:state =>state.user.teacherNumber,
   companyNumber:state =>state.user.companyNumber,
-
+  studentNumber:state =>state.user.studentNumber,
 
 }
 export default getters

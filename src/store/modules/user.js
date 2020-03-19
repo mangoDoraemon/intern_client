@@ -16,7 +16,8 @@ const state = {
   roleName:'',
   redis: [],
   teacherNumber:'',
-  companyNumber:''
+  companyNumber:'',
+  studentNumber:''
 }
 
 const mutations = {
@@ -56,6 +57,9 @@ const mutations = {
   SET_COMPANY_NUMBER:(state,companyNumber)=>{
     state.companyNumber=companyNumber
   },
+  SET_STUDENT_NUMBER:(state,studentNumber)=>{
+    state.studentNumber=studentNumber
+  },
   $_setRedis: (state, data) => {
     const {key, value} = data;
     state.redis[key] = value
@@ -88,7 +92,7 @@ const actions = {
         if (!model) {
           reject('Verification failed, please Login again.')
         }
-        const { roles, name, avatar, introduction, email,socialId,roleId,id,roleName,teacherNumber,companyNumber } = model
+        const { roles, name, avatar, introduction, email,socialId,roleId,id,roleName,teacherNumber,companyNumber,studentNumber } = model
         // roles must be a non-empty array
         debugger
         if (!roles || roles.length <= 0) {
@@ -106,6 +110,7 @@ const actions = {
         commit('SET_ROLE_NAME',roleName)
         commit('SET_TEACHER_NUMBER',teacherNumber)
         commit('SET_COMPANY_NUMBER',companyNumber)
+        commit('SET_STUDENT_NUMBER',studentNumber)
         resolve(model)
 
       }).catch(error => {

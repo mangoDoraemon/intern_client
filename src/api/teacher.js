@@ -23,3 +23,10 @@ export function updateTeacher(data) {
     data
   })
 }
+
+export function delTeacherInfo(ids) {
+    return request({
+        url: `/auth/teacher/removeTeacherInfo/${ids}`,
+        method: 'delete',
+    })
+}

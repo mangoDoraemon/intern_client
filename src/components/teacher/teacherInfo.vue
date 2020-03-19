@@ -110,7 +110,8 @@
 </template>
 
 <script>
-    import { listTeacher, getPost, delPost, addTeacher, updateTeacher } from "@/api/teacher";
+    import { listTeacher, getPost, addTeacher, updateTeacher } from "@/api/teacher";
+    import {delTeacherInfo} from "../../api/teacher";
 
     export default {
         name: "TeacherInfo",
@@ -194,7 +195,7 @@
             },
             /** 重置按钮操作 */
             resetQuery() {
-                this.resetForm("queryForm");
+                this.fuzzy=''
                 this.handleQuery();
             },
             // 多选框选中数据
@@ -256,16 +257,23 @@
             },
             /** 删除按钮操作 */
             handleDelete(row) {
-                const postIds = row.postId || this.ids;
-                this.$confirm('是否确认删除岗位信息编号为"' + postIds + '"的数据项?', "警告", {
+                const ids = row.id || this.ids;
+                this.$confirm('是否确认删除选中的数据项?', "警告", {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning"
                 }).then(function() {
-                    return delPost(postIds);
-                }).then(() => {
-                    this.getList();
-                    this.msgSuccess("删除成功");
+                    return delTeacherInfo(ids);
+                }).then((res) => {
+                    this.$message({
+                        message: res.data.msg,
+                        type: res.data.level
+                    });
+                    if(res.data.code==='200'){
+                        this.getList();
+                    }
+
+
                 }).catch(function() {});
             },
 

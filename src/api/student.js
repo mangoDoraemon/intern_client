@@ -1,56 +1,68 @@
 import request from '@/utils/request'
 
-export function login(data) {
+export function listStudent(query) {
   return request({
-    url: '/auth/login',
-    method: 'post',
-    data
-  })
-}
-
-export function getInfo(token) {
-  return request({
-    url: `/auth/getUserInfo/${token}`,
-    method: 'get',
-  })
-}
-
-export function createUser(data) {
-  return request({
-    url:'/auth/register',
-    method:'post',
-    data
-  })
-}
-
-
-export function getUserList(query) {
-  return request({
-    url: '/auth/user/v1/list',
+    url: '/auth/student/fetchStudentInfoData',
     method: 'get',
     params: query
   })
 }
 
-export function fetchMineInfo(socialId) {
+export function addStudent(data) {
   return request({
-    url:'/auth/fetchMineInfo/'+socialId,
-    method:'get'
+    url:'/auth/student/addStudentInfo',
+    method:'post',
+    data
   })
 }
 
-export function updateMineInfo(data) {
+export function delStudentInfo(ids) {
   return request({
-    url:'/auth/updateMineInfo',
+    url: `/auth/student/removeStudentInfo/${ids}`,
+    method: 'delete',
+  })
+}
+
+export function getStudentInfo(id) {
+  return request({
+    url: `/auth/student/getStudentInfoById/${id}`,
+    method: 'get',
+  })
+}
+
+export function updateStudentInfo(data) {
+  return request({
+    url:'/auth/student/updateStudentInfo',
     method:'put',
     data
   })
 }
 
-export function updateModifyPsd(data) {
+export function listStudentInfoAll(query) {
   return request({
-    url:'/auth/modifyPsd',
-    method:'put',
-    data
+    url: '/auth/student/fetchStudentInfoAll',
+    method: 'get',
+    params: query
+  })
+}
+
+export function updateStudentState(id,teacherNumber) {
+  return request({
+    url: `/auth/student/updateStudentState/${id}/${teacherNumber}`,
+    method: 'get',
+  })
+}
+
+export function removeStudentState(id) {
+  return request({
+    url: `/auth/student/removeStudentState/${id}`,
+    method: 'get',
+  })
+}
+
+export function getStudentInfoByNumber(id) {
+  return request({
+    url: `/auth/student/getStudentInfoByNumber/${id}`,
+    method: 'get',
   })
 }

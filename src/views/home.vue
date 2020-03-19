@@ -32,41 +32,64 @@
                 <el-menu-item index="/mineInfo">指导记录增加</el-menu-item>
                 <el-menu-item index="1-2">指导记录管理</el-menu-item>
               </el-menu-item-group>
+
+                <el-menu-item-group>
+                    <span slot="title">实习报告</span>
+                    <el-menu-item index="/internshipReport">实习报告管理</el-menu-item>
+                    <el-menu-item index="/addReport">实习报告填写</el-menu-item>
+                </el-menu-item-group>
+
+
               <el-menu-item-group title="周计划管理">
                 <el-menu-item index="1-3">周记批改</el-menu-item>
                 <el-menu-item index="1-9">周次计划</el-menu-item>
               </el-menu-item-group>
-              <el-submenu index="1-4">
-                <span slot="title">毕业设计信息</span>
-                <el-menu-item index="1-4-1">毕业设计任务书管理</el-menu-item>
+
+              <el-submenu index="实习信息">
+                <span slot="title">实习信息</span>
+                <el-menu-item index="/internShipInfo">实习信息管理</el-menu-item>
+                <el-menu-item index="/addInternShip">实习信息增加</el-menu-item>
               </el-submenu>
+
             </el-submenu>
+            <el-menu-item index="/adminUser">
+              <i class="el-icon-user"></i>
+              <span slot="title">用户管理</span>
+            </el-menu-item>
+
             <el-menu-item index="/studentInfo">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-coordinate"></i>
               <span slot="title">学生管理</span>
             </el-menu-item>
 
             <el-menu-item index="/teacherInfo">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-place"></i>
               <span slot="title">教师管理</span>
             </el-menu-item>
 
-            <el-menu-item index="/studentInfo">
-              <i class="el-icon-menu"></i>
+            <el-menu-item index="/companyInfo">
+              <i class="el-icon-info"></i>
               <span slot="title">企业管理</span>
             </el-menu-item>
 
+
+
             <el-menu-item index="/notice">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-s-comment"></i>
               <span slot="title">公告管理</span>
             </el-menu-item>
+            <el-menu-item index="/sysDict">
+              <i class="el-icon-s-comment"></i>
+              <span slot="title">字典管理</span>
+            </el-menu-item>
+
             <el-menu-item index="/userManagement">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-phone"></i>
               <span slot="title">学生通讯录</span>
             </el-menu-item>
 
             <el-menu-item index="/userManagement">
-              <i class="el-icon-menu"></i>
+              <i class="el-icon-phone-outline"></i>
               <span slot="title">老师通讯录</span>
             </el-menu-item>
 
@@ -199,12 +222,33 @@
           if(keyPath[i]==='/index'){
             keyPath[i]=''
           }
-
+          if(keyPath[i]==='/adminUser'){
+            keyPath[i]='用户管理'
+          }
+          if(keyPath[i]==='/sysDict'){
+            keyPath[i]='字典管理'
+          }
+          if(keyPath[i]==='/companyInfo'){
+            keyPath[i]='企业管理'
+          }
+          if(keyPath[i]==='/internShipInfo'){
+            keyPath[i]='实习信息管理'
+          }
+          if(keyPath[i] === '/addInternShip'){
+            keyPath[i]='实习信息添加'
+          }
+          if(keyPath[i] === '1'){
+            keyPath[i]='常规菜单'
+          }
+          if(keyPath[i] === '/internshipReport'){
+            keyPath[i]='实习报告管理'
+          }
+          if(keyPath[i] === '/addReport'){
+            keyPath[i]='实习报告填写'
+          }
 
         }
         this.list=keyPath
-        console.log(key)
-        console.log(keyPath)
       },
     },
 
