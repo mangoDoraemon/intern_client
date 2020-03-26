@@ -21,6 +21,11 @@ import AddInternShip from "@/components/internShip/addInternShip"
 import InternShipInfo from "@/components/internShip/internShipInfo"
 import InternshipReport from "@/components/internShip/internshipReport"
 import AddReport from "@/components/internShip/addReport"
+import NoticeDetail from "@/components/notice/noticeDetail"
+import DealInfo from "@/components/common/dealInfo"
+import TeacherContact from "@/components/common/teacherContact"
+import StudentContact from "@/components/common/studentContact"
+import GuidInfo from "@/components/common/guidInfo"
 import {getToken,removeToken} from "@/utils/auth";
 Vue.use(Router)
 
@@ -72,6 +77,50 @@ let router =  new Router({
       children: [{
         path: '/userManagement',
         component: UserManagement,
+        name: '用户管理',
+        hidden: true
+      },]
+    },
+    {
+      path:'/home',
+      name: '处理中心',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/dealInfo',
+        component: DealInfo,
+        name: '处理中心',
+        hidden: true
+      },]
+    },
+    {
+      path:'/home',
+      name: '指导记录管理',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/guidInfo',
+        component: GuidInfo,
+        name: '指导记录管理',
+        hidden: true
+      },]
+    },
+    {
+      path:'/home',
+      name: '学生通讯录',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/studentContact',
+        component: StudentContact,
+        name: '用户管理',
+        hidden: true
+      },]
+    },
+    {
+      path:'/home',
+      name: '教师通讯录',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/teacherContact',
+        component: TeacherContact,
         name: '用户管理',
         hidden: true
       },]
@@ -153,6 +202,17 @@ let router =  new Router({
         path: '/notice',
         component: Notice,
         name: '公告管理',
+        hidden: true
+      },]
+    },
+    {
+      path:'/home',
+      name: '公告详情',
+      component: () => import('@/views/home'),
+      children: [{
+        path: '/noticeDetail',
+        component: NoticeDetail,
+        name: '公告详情',
         hidden: true
       },]
     },

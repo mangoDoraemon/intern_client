@@ -37,3 +37,10 @@ export function updateDataInfoById(id,updateType) {
         method: 'get',
     })
 }
+
+export function getDataInfoByIdAndNumber(studentNumber) {
+    return request({
+        url: `/internShip/getDataInfoByIdAndNumber/${studentNumber}`,
+        method: 'get',
+    })
+}

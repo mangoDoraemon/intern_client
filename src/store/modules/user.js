@@ -17,7 +17,8 @@ const state = {
   redis: [],
   teacherNumber:'',
   companyNumber:'',
-  studentNumber:''
+  studentNumber:'',
+  yesOrNo:'',
 }
 
 const mutations = {
@@ -31,7 +32,7 @@ const mutations = {
     state.name = name
   },
   SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
+    state.avatar = avatar.substring(10,23)
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
@@ -59,6 +60,9 @@ const mutations = {
   },
   SET_STUDENT_NUMBER:(state,studentNumber)=>{
     state.studentNumber=studentNumber
+  },
+  SET_YES_OR_NO:(state,yesOrNo)=>{
+    state.yesOrNo=yesOrNo
   },
   $_setRedis: (state, data) => {
     const {key, value} = data;
@@ -92,9 +96,8 @@ const actions = {
         if (!model) {
           reject('Verification failed, please Login again.')
         }
-        const { roles, name, avatar, introduction, email,socialId,roleId,id,roleName,teacherNumber,companyNumber,studentNumber } = model
+        const { roles, name, avatar, introduction, email,socialId,roleId,id,roleName,teacherNumber,companyNumber,studentNumber,yesOrNo } = model
         // roles must be a non-empty array
-        debugger
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
@@ -111,6 +114,7 @@ const actions = {
         commit('SET_TEACHER_NUMBER',teacherNumber)
         commit('SET_COMPANY_NUMBER',companyNumber)
         commit('SET_STUDENT_NUMBER',studentNumber)
+        commit('SET_YES_OR_NO',yesOrNo)
         resolve(model)
 
       }).catch(error => {

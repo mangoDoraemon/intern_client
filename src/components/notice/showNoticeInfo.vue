@@ -11,7 +11,7 @@
                 <div class="article-header">
                     <h2 class="article-title">
                         <!-- <router-link to="{path:'/contents',query:{id:article.id}}" class="title-link">{{article.title}}</router-link> -->
-                        <span class="title-link" >{{notice.noticeTitle}}</span>
+                        <span class="title-link" @click="toDetail(notice)">{{notice.noticeTitle}}</span>
                     </h2>
                     <span class="article-body" >{{notice.noticeContent | cutString(180)}}</span>
                 </div>
@@ -85,6 +85,9 @@
                 this.pageSize = val;
                 this.fetchDataInfoAll()
             },
+            toDetail(notice){
+                this.$router.push({ path: "/noticeDetail", query: { notice } });
+            }
         }
     }
 </script>

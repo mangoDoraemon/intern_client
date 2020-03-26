@@ -13,6 +13,6 @@ const getters = {
   teacherNumber:state =>state.user.teacherNumber,
   companyNumber:state =>state.user.companyNumber,
   studentNumber:state =>state.user.studentNumber,
-
+  yesOrNo:state =>state.user.yesOrNo,
 }
 export default getters

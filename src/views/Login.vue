@@ -65,7 +65,7 @@
 
                     <el-row v-if="radio === 3">
                         <el-col >
-                            <el-form-item label="学号：" prop="empPwd">
+                            <el-form-item label="学号：" prop="accountMapper">
                                 <el-input  placeholder="请输您的学号" v-model="empRegisteredForm.studentNumber"></el-input>
                             </el-form-item>
                         </el-col>
@@ -73,7 +73,7 @@
 
                     <el-row v-if="radio === 6">
                         <el-col >
-                            <el-form-item label="工号：" prop="empPwd">
+                            <el-form-item label="工号：" prop="accountMapper">
                                 <el-input  placeholder="请输入您的工号" v-model="empRegisteredForm.teacherNumber"></el-input>
                             </el-form-item>
                         </el-col>
@@ -81,7 +81,7 @@
 
                     <el-row v-if="radio === 9">
                         <el-col >
-                            <el-form-item label="企业信用号" prop="empPwd">
+                            <el-form-item label="企业信用号" prop="accountMapper">
                                 <el-input  placeholder="请输入您的企业信用号" v-model="empRegisteredForm.companyNumber"></el-input>
                             </el-form-item>
                         </el-col>
@@ -113,6 +113,31 @@
     export default {
         name: 'login',
         data() {
+
+            let checkAccount =(rule, value, callback) => {
+
+                if(!this.account.username){
+                    return callback(new Error('请输入账号'))
+                } else {
+                    callback()
+                }
+            }
+            let checkPassword =(rule, value, callback) => {
+
+                if(!this.account.password){
+                    return callback(new Error('请输入密码'))
+                } else {
+                    callback()
+                }
+            }
+            let checkRadio =(rule, value, callback) => {
+
+                if(!this.radio){
+                    return callback(new Error('请选择注册类型'))
+                } else {
+                    callback()
+                }
+            }
             let checkCode = (rule, value, callback) => {
 
                 if(this.empRegisteredForm.seccode!= this.checkCode){
@@ -151,10 +176,18 @@
                         message: '请输入密码',
                         trigger: 'blur'
                     }],
+                    account: [{required: true, validator: checkAccount, trigger: 'blur'}],
+                    password: [{required: true, validator: checkPassword, trigger: 'blur'}],
                     seccode: [
                         { required: true, message: "请输验证码", trigger: "blur" },
                         {required: true, validator: checkCode, trigger: 'blur'}
-                    ]
+                    ],
+                    radio:[
+                        { required: true, validator: checkRadio, trigger: "blur" },
+                    ],
+                    accountMapper:[
+                        {validator:this.accountIdIsNull, trigger: 'blur'},
+                    ],
                 },
 
             }
@@ -163,6 +196,17 @@
             this.getCookie();
         },
         methods: {
+            accountIdIsNull(rules, value, callback){
+                if(this.radio ===3 && !this.empRegisteredForm.studentNumber){
+                    callback(new Error("请填写学号"))
+                }else if(this.radio ===6 && !this.empRegisteredForm.teacherNumber){
+                    callback(new Error("请填写工号"))
+                }else if(this.radio ===9 && !this.empRegisteredForm.companyNumber){
+                    callback(new Error("请填写企业信用号"))
+                }else {
+                    callback()
+                }
+            },
 
 
             createCode() {
@@ -176,7 +220,7 @@
                 this.checkCode = code; //把code值赋给验证码
             },
             afterRegistered(){
-                this.$refs.empRegisteredForm.validate((valid) => {
+                this.$refs["empRegisteredForm"].validate((valid) => {
                     if (valid) {
                         //验证通过 可以提交
                         this.logining = true;
@@ -191,9 +235,8 @@
                         };
                         //调用函数  传递参数 获取结果
                         createUser(registeredParams).then(data => {
-                            debugger
                             this.logining = false;
-                            this.dialogVisible=false;
+
                             if (data.data.code == '200') {
                                 //注册成功
                                 this.$message({
@@ -201,6 +244,8 @@
                                     type: data.data.level
                                 });
                                 this.dialogVisible= false;
+                                this.cancelRegistered();
+
                             } else if(data.data.code ==='3333') {
                                 this.$message({
                                     message: data.data.msg,
@@ -219,10 +264,7 @@
                             }
                         })
                     } else {
-                        this.$message({
-                            message: "注册失败",
-                            type: "error"
-                        });
+
                         return false;
                     }
                 });
@@ -274,7 +316,7 @@
             //登录
             handleLogin() {
 
-                this.$refs.AccountFrom.validate((valid) => {
+                this.$refs["AccountFrom"].validate((valid) => {
                     if (valid) {
                         //验证通过 可以提交
                         this.logining = true;

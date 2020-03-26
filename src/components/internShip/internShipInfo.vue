@@ -73,6 +73,8 @@
                             v-if="roleName==='user' && scope.row.state ==='1111'"
                             @click="handleStop(scope.row)"
                     >停用</el-button>
+
+                    <el-tag type="success" v-if=" scope.row.state ==='1111'">实习信息审核通过</el-tag>
                 </template>
             </el-table-column>
         </el-table>
@@ -257,12 +259,6 @@
                 this.ids = selection.map(item => item.id)
                 this.single = selection.length!=1
                 this.multiple = !selection.length
-            },
-            /** 新增按钮操作 */
-            handleAdd() {
-                this.reset();
-                this.open = true;
-                this.title = "添加岗位信息";
             },
             /** 修改按钮操作 */
             handleUpdate(row) {

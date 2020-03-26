@@ -1,37 +1,36 @@
 <template>
     <div>
-        <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
+        <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="150px">
             <el-row gutter="10">
-                <el-col :span="9":offset="3">
-                    <el-form-item label="下拉选择" prop="field108">
-                        <el-select v-model="formData.field108" placeholder="请选择下拉选择" clearable :style="{width: '50%',height:'30%'}">
-                            <el-option v-for="(item, index) in field108Options" :key="index" :label="item.label"
-                                       :value="item.value" :disabled="item.disabled"></el-option>
+                <el-col :span="9" :offset="3">
+                    <el-form-item label="选择对应实习信息" prop="internshipId">
+                        <el-select v-model="formData.internshipId" placeholder="请选择" clearable :style="{width: '50%',height:'30%'}" >
+                            <el-option v-for="(item, index) in options" :key="index" :label="item.companyName"
+                                       :value="item.id" :disabled="item.disabled"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="9">
-                    <el-form-item label="日期选择" prop="field109">
-                        <el-date-picker v-model="formData.field109" format="yyyy-MM-dd" value-format="yyyy-MM-dd"
+                    <el-form-item label="报告日期" prop="reportDate">
+                        <el-date-picker v-model="formData.reportDate" format="yyyy-MM-dd" value-format="yyyy-MM-dd"
                                         :style="{width: '50%'}" placeholder="请选择日期选择" clearable></el-date-picker>
                     </el-form-item>
                 </el-col>
-                <el-col :span="10":offset="3">
-                    <el-form-item label="单行文本" prop="field107">
-                        <el-input v-model="formData.field107" placeholder="请输入单行文本" clearable :style="{width: '50%'}">
+                <el-col :span="10" :offset="3">
+                    <el-form-item label="报告标题" prop="reportName">
+                        <el-input v-model="formData.reportName" placeholder="请输入报告标题" clearable :style="{width: '50%'}">
                         </el-input>
                     </el-form-item>
                 </el-col>
 
             </el-row>
             <div style="width: 1000px;margin-left: 200px;margin-top: 20px">
-                <el-form-item  label="报告内容" prop="noticeContent">
+                <el-form-item  label="报告内容" prop="reportContent">
                     <mavon-editor
-                            v-model="formData.field107"
+                            v-model="formData.reportContent"
                             :toolbars="toolbars"
                             class="blogcontent"
                             ref="md"
-                            @change="changeHtml"
                     />
                 </el-form-item>
             </div>
@@ -47,16 +46,24 @@
     </div>
 </template>
 <script>
+    import {getDataInfoByIdAndNumber} from "../../api/internShip";
+    import {createReport} from "../../api/report";
+
     export default {
         components: {},
         props: [],
         data() {
             return {
+                studentNumber:'',
+                options:[],
                 formData: {
-                    field109: null,
-                    field108: undefined,
-                    field107: undefined,
-                },                toolbars: {
+                    internshipId: '',
+                    reportName: '',
+                    reportDate:'',
+                    reportContent:'',
+                    studentNumber: '',
+                },
+                toolbars: {
                     bold: true, // 粗体
                     italic: true, // 斜体
                     header: true, // 标题
@@ -79,29 +86,22 @@
                     navigation: true // 导航目录
                 },
                 rules: {
-                    field109: [{
+                    reportDate: [{
                         required: true,
-                        message: '请选择日期选择',
+                        message: '请选择报告日期',
                         trigger: 'change'
                     }],
-                    field108: [{
+                    internshipId: [{
                         required: true,
-                        message: '请选择下拉选择',
+                        message: '请选择对应的实习信息',
                         trigger: 'change'
                     }],
-                    field107: [{
+                    reportName: [{
                         required: true,
-                        message: '请输入单行文本',
+                        message: '请输入报告标题',
                         trigger: 'blur'
                     }],
                 },
-                field108Options: [{
-                    "label": "选项一",
-                    "value": 1
-                }, {
-                    "label": "选项二",
-                    "value": 2
-                }],
             }
         },
         computed: {
@@ -111,20 +111,51 @@
 
         },
         created() {
-
+         this.initData();
         },
         mounted() {
 
         },
         methods: {
+            initData(){
+                this.studentNumber=this.$store.getters.studentNumber
+                this.formData.studentNumber=this.$store.getters.studentNumber
+                if( this.studentNumber){
+                    getDataInfoByIdAndNumber(this.studentNumber).then(response => {
+                        this.options = response.data.listInternShip;
+                    });
+                }
+            },
             submitForm() {
                 this.$refs['elForm'].validate(valid => {
-                    if (!valid) return
-                    // TODO 提交表单
+                    if (!valid) {
+                        return
+                    }else {
+                        createReport(this.formData).then(response => {
+                            if (response.data.code === '200') {
+                                this.$message({
+                                    message: response.data.msg,
+                                    type: response.data.level
+                                });
+                                this.$store.dispatch('user/getInfo');
+                                this.$router.push('/internshipReport');
+                            }else {
+                                this.$message({
+                                    message: response.data.msg,
+                                    type: response.data.level
+                                });
+                            }
+                        })
+                    }
                 })
             },
             resetForm() {
-                this.$refs['elForm'].resetFields()
+                this.formData= {
+                        internshipId: '',
+                        reportName: '',
+                        reportDate:'',
+                        reportContent:''
+                }
             },
         }
     }

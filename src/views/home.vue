@@ -27,79 +27,61 @@
                 <i class="el-icon-location"></i>
                 <span slot="title">常规菜单</span>
               </template>
-              <el-menu-item-group>
+              <el-menu-item-group v-if="this.$store.getters.roleName==='teacher'">
                 <span slot="title">指导记录</span>
-                <el-menu-item index="/mineInfo">指导记录增加</el-menu-item>
-                <el-menu-item index="1-2">指导记录管理</el-menu-item>
+                <el-menu-item index="/guidInfo">指导记录管理</el-menu-item>
               </el-menu-item-group>
 
-                <el-menu-item-group>
-                    <span slot="title">实习报告</span>
-                    <el-menu-item index="/internshipReport">实习报告管理</el-menu-item>
-                    <el-menu-item index="/addReport">实习报告填写</el-menu-item>
+                <el-menu-item-group  v-if="this.$store.getters.roleName==='teacher' || this.$store.getters.roleName==='user'">
+                    <span slot="title" >实习报告</span>
+                    <el-menu-item index="/internshipReport" v-if="this.$store.getters.roleName==='teacher' || this.$store.getters.roleName==='user'">实习报告管理</el-menu-item>
+                    <el-menu-item index="/addReport" v-if="this.$store.getters.roleName==='user'" >实习报告填写</el-menu-item>
                 </el-menu-item-group>
-
-
-              <el-menu-item-group title="周计划管理">
-                <el-menu-item index="1-3">周记批改</el-menu-item>
-                <el-menu-item index="1-9">周次计划</el-menu-item>
-              </el-menu-item-group>
-
-              <el-submenu index="实习信息">
-                <span slot="title">实习信息</span>
-                <el-menu-item index="/internShipInfo">实习信息管理</el-menu-item>
-                <el-menu-item index="/addInternShip">实习信息增加</el-menu-item>
+              <el-submenu index="实习信息" v-if="this.$store.getters.roleName==='teacher' || this.$store.getters.roleName==='user'">
+                <span slot="title" >实习信息</span>
+                <el-menu-item index="/internShipInfo" v-if="this.$store.getters.roleName==='teacher' || this.$store.getters.roleName==='user'">实习信息管理</el-menu-item>
+                <el-menu-item index="/addInternShip" v-if="this.$store.getters.roleName==='user'">实习信息增加</el-menu-item>
               </el-submenu>
 
             </el-submenu>
-            <el-menu-item index="/adminUser">
+            <el-menu-item index="/adminUser" v-if="this.$store.getters.roleName==='admin'">
               <i class="el-icon-user"></i>
               <span slot="title">用户管理</span>
             </el-menu-item>
 
-            <el-menu-item index="/studentInfo">
+            <el-menu-item index="/studentInfo" v-if="this.$store.getters.roleName==='admin' || this.$store.getters.roleName==='teacher'">
               <i class="el-icon-coordinate"></i>
               <span slot="title">学生管理</span>
             </el-menu-item>
 
-            <el-menu-item index="/teacherInfo">
+            <el-menu-item index="/teacherInfo" v-if="this.$store.getters.roleName==='admin'">
               <i class="el-icon-place"></i>
               <span slot="title">教师管理</span>
             </el-menu-item>
 
-            <el-menu-item index="/companyInfo">
+            <el-menu-item index="/companyInfo" v-if="this.$store.getters.roleName==='admin'">
               <i class="el-icon-info"></i>
               <span slot="title">企业管理</span>
             </el-menu-item>
 
-
-
-            <el-menu-item index="/notice">
-              <i class="el-icon-s-comment"></i>
+            <el-menu-item index="/notice" v-if="this.$store.getters.roleName!=='user'">
+              <i class="el-icon-s-comment" ></i>
               <span slot="title">公告管理</span>
             </el-menu-item>
-            <el-menu-item index="/sysDict">
-              <i class="el-icon-s-comment"></i>
-              <span slot="title">字典管理</span>
-            </el-menu-item>
+<!--            <el-menu-item index="/sysDict">-->
+<!--              <i class="el-icon-s-comment"></i>-->
+<!--              <span slot="title">字典管理</span>-->
+<!--            </el-menu-item>-->
 
-            <el-menu-item index="/userManagement">
+            <el-menu-item index="/studentContact">
               <i class="el-icon-phone"></i>
               <span slot="title">学生通讯录</span>
             </el-menu-item>
 
-            <el-menu-item index="/userManagement">
+            <el-menu-item index="/teacherContact">
               <i class="el-icon-phone-outline"></i>
               <span slot="title">老师通讯录</span>
             </el-menu-item>
-
-
-
-
-<!--            <el-menu-item index="4">-->
-<!--              <i class="el-icon-setting"></i>-->
-<!--              <span slot="title">导航四</span>-->
-<!--            </el-menu-item>-->
           </el-menu>
         </div>
 
@@ -119,7 +101,10 @@
                    router
                    @select="handleSelect"
                    active-text-color="#409EFF">
-            <el-menu-item index="1">处理中心</el-menu-item>
+
+            <el-menu-item index="/dealInfo"><el-badge :is-dot="(this.$store.getters.yesOrNo === 'YES') ? true : false">处理中心</el-badge></el-menu-item>
+
+
             <el-submenu index="个人中心">
               <template slot="title">个人中心</template>
               <el-menu-item index="/mineInfo">我的信息</el-menu-item>
@@ -132,9 +117,9 @@
           <div class="app-header-userinfo">
             <el-dropdown trigger="hover"
                          :hide-on-click="false">
-              <div class="block"><el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar></div>
+              <div class="block"><el-avatar :size="50" :src="require('E:/images/'+this.$store.getters.avatar+'.jpg')"></el-avatar></div>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>我的消息</el-dropdown-item>
+                <el-dropdown-item >我的信息</el-dropdown-item>
                 <el-dropdown-item>设置</el-dropdown-item>
                 <el-dropdown-item divided
                                   @click.native="logout">退出登录</el-dropdown-item>
@@ -166,6 +151,8 @@
 
 <script>
   import '@/styles/index.scss'
+  import {getInfo} from "../api/user";
+  import {getToken} from "../utils/auth";
   export default {
     name: 'Container',
     data() {
@@ -174,9 +161,19 @@
         isCollapse: false,
         show:false,
         activeIndex: '1',
+          task:true,
         list:[],
+          item:''
       }
     },
+      created(){
+          getInfo(getToken()).then(res => {
+              let model  = res.data.userInfos
+              const { avatar } = model
+              let _that=this
+              _that.item=avatar.substring(10,23)
+          })
+      },
     methods: {
       toggleSideBar() {
         this.isCollapse = !this.isCollapse
@@ -246,6 +243,18 @@
           if(keyPath[i] === '/addReport'){
             keyPath[i]='实习报告填写'
           }
+          if(keyPath[i] === '/studentContact'){
+            keyPath[i]='学生通讯录'
+          }
+          if(keyPath[i] === '/teacherContact'){
+            keyPath[i]='教师通讯录'
+          }
+          if(keyPath[i] === '/dealInfo'){
+            keyPath[i]='处理中心'
+          }
+          if(keyPath[i] === '/guidInfo'){
+            keyPath[i]='指导记录管理'
+          }
 
         }
         this.list=keyPath
@@ -255,5 +264,11 @@
   }
 </script>
 
-<style>
+<style scoped>
+  >>>.el-badge__content.is-fixed{
+    margin-top: 13px;
+  }
+  .item {
+    margin-right: 40px;
+  }
 </style>

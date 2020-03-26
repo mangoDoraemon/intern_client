@@ -24,6 +24,13 @@ function padLeftZero(str) {
   return ('00' + str).substr(str.length)
 }
 
+export function markDownChangeHtml(str) {
+  if(str !==null){
+    let md = new MarkdownIt()
+    str = md.render(str)
+    return str
+  }
+}
 export function cutString(str, len) {
   if (str !== null) {
     let md = new MarkdownIt()

@@ -205,6 +205,7 @@
           let _that=this
           _that.item=avatar.substring(10,23)
         })
+        this.$store.dispatch('user/getInfo');
 
 
 
