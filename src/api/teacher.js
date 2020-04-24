@@ -30,3 +30,10 @@ export function delTeacherInfo(ids) {
         method: 'delete',
     })
 }
+
+export function getTeacherInfo(id) {
+    return request({
+        url: `/auth/teacher/getTeacherInfoById/${id}`,
+        method: 'get',
+    })
+}

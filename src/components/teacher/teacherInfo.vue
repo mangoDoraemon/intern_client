@@ -110,8 +110,8 @@
 </template>
 
 <script>
-    import { listTeacher, getPost, addTeacher, updateTeacher } from "@/api/teacher";
-    import {delTeacherInfo} from "../../api/teacher";
+    import { listTeacher, addTeacher, updateTeacher } from "@/api/teacher";
+    import {delTeacherInfo, getTeacherInfo} from "../../api/teacher";
 
     export default {
         name: "TeacherInfo",
@@ -200,7 +200,7 @@
             },
             // 多选框选中数据
             handleSelectionChange(selection) {
-                this.ids = selection.map(item => item.postId)
+                this.ids = selection.map(item => item.id)
                 this.single = selection.length!=1
                 this.multiple = !selection.length
             },
@@ -214,11 +214,11 @@
             /** 修改按钮操作 */
             handleUpdate(row) {
                 this.reset();
-                const postId = row.postId || this.ids
-                getPost(postId).then(response => {
-                    this.form = response.data;
+                const id = row.id || this.ids
+                getTeacherInfo(id).then(response => {
+                    this.form = response.data.teacherInfo;
                     this.open = true;
-                    this.title = "修改岗位信息";
+                    this.title = "修改教师信息";
                 });
             },
             /** 提交按钮 */
@@ -243,12 +243,18 @@
                             });
                         } else {
                             updateTeacher(this.form).then(response => {
-                                if (response.code === 200) {
-                                    this.msgSuccess("新增成功");
+                                if (response.data.code === '200') {
+                                    this.$message({
+                                        message: "修改成功",
+                                        type:'success'
+                                    });
                                     this.open = false;
                                     this.getList();
                                 } else {
-                                    this.msgError(response.msg);
+                                    this.$message({
+                                        message: "修改失败，请稍后重试",
+                                        type:'error'
+                                    });
                                 }
                             });
                         }

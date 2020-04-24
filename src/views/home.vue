@@ -22,7 +22,7 @@
               <i class="el-icon-document"></i>
               <span slot="title">首页</span>
             </el-menu-item>
-            <el-submenu index="1">
+            <el-submenu index="1"  v-if="this.$store.getters.roleName==='teacher' || this.$store.getters.roleName==='user'">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span slot="title">常规菜单</span>
@@ -119,8 +119,6 @@
                          :hide-on-click="false">
               <div class="block"><el-avatar :size="50" :src="require('E:/images/'+this.$store.getters.avatar+'.jpg')"></el-avatar></div>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item >我的信息</el-dropdown-item>
-                <el-dropdown-item>设置</el-dropdown-item>
                 <el-dropdown-item divided
                                   @click.native="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
