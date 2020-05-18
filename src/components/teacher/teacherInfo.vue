@@ -53,7 +53,7 @@
             <el-table-column label="手机号" align="center" prop="teacherPhone" />
             <el-table-column label="教师岗位" align="center" prop="teacherPosition" />
             <el-table-column label="所属院系" align="center" prop="teacherDepartments" />
-            <el-table-column label="教师状态" align="center" prop="state" />
+            <el-table-column label="教师状态" align="center" prop="stateName" />
             <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
                     <el-button

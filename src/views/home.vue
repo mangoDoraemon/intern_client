@@ -117,7 +117,7 @@
           <div class="app-header-userinfo">
             <el-dropdown trigger="hover"
                          :hide-on-click="false">
-              <div class="block"><el-avatar :size="50" :src="require('E:/images/'+this.$store.getters.avatar+'.jpg')"></el-avatar></div>
+              <div class="block"><el-avatar :size="50" :src="require('D:/images/'+this.$store.getters.avatar+'.jpg')"></el-avatar></div>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item divided
                                   @click.native="logout">退出登录</el-dropdown-item>

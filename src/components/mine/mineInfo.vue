@@ -55,7 +55,7 @@
               :on-success="handleAvatarSuccess"
               :headers="headers"
               :before-upload="beforeAvatarUpload">
-        <img :src="require('E:/images/'+item+'.jpg')" class="avatar">
+        <img :src="require('D:/images/'+item+'.jpg')" class="avatar">
       </el-upload>
         <span style="">点击修改头像</span>
       </div>

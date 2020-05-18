@@ -18,13 +18,14 @@ export function addCompany(data) {
 
 export function delCompanyInfo(ids) {
   return request({
-    url: `/company/removeCompany/${ids}`,
+    url:  `/company/removeCompany/${ids}`,
     method: 'delete',
   })
 }
 
 export function getCompany(id) {
   return request({
+
     url: `/company/getCompany/${id}`,
     method: 'get',
   })

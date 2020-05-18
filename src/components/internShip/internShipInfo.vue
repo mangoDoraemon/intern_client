@@ -66,6 +66,15 @@
                             v-if="roleName==='teacher' && scope.row.state ==='0000'"
                             @click="handlePass(scope.row)"
                     >审批</el-button>
+
+                    <el-button
+                            size="mini"
+                            type="text"
+                            icon="el-icon-edit"
+                            v-if="roleName==='teacher' && scope.row.state ==='0000'"
+                            @click="handleBack(scope.row)"
+                    >驳回</el-button>
+
                     <el-button
                             size="mini"
                             type="text"
@@ -320,7 +329,25 @@
                     }
                 }).catch(function() {});
             },
-
+            handleBack(row){
+                const id = row.id || this.ids;
+                const updateType='BACK'
+                this.$confirm('确认要驳回实习信息吗', "警告", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning"
+                }).then(function() {
+                    return updateDataInfoById(id,updateType);
+                }).then((res) => {
+                    this.$message({
+                        message: res.data.msg,
+                        type: res.data.level
+                    });
+                    if(res.data.code==='200'){
+                        this.getList();
+                    }
+                }).catch(function() {});
+            },
             handleStop(row){
                 const id = row.id || this.ids;
                 const updateType='STOP'
